@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import {MaterialRecordEntity, GetMaterialRecordDataRequest, GetMaterialRecordUpdateRequest} from "../types";
 
-export class Search {
+export class GetData {
 
     static obiQuery (): GetMaterialRecordDataRequest {
         let data = {} as GetMaterialRecordDataRequest;
@@ -54,7 +54,7 @@ export class Search {
         }
     }
 
-    static async searchProduct(productGroup: string, link: string): Promise<MaterialRecordEntity> {
+    static async getNewRecord(link: string, productGroup: string): Promise<MaterialRecordEntity> {
         try {
             const url = new URL(link).hostname;
             const shopName = url.split(".")[1];
@@ -74,7 +74,7 @@ export class Search {
         }
     }
 
-    static async updateProduct(link: string, shopName: string): Promise<GetMaterialRecordUpdateRequest> {
+    static async updateRecordData(link: string, shopName: string): Promise<GetMaterialRecordUpdateRequest> {
         try {
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
@@ -82,10 +82,7 @@ export class Search {
             await page.goto(link);
             const product = await page.evaluate(this.chooseQuery(shopName));
             await browser.close();
-            return {
-                currentPrice: product.currentPrice,
-                link: product.link,
-            }
+            return product.currentPrice
         }
          catch (err) {
             console.error(err);
