@@ -1,5 +1,5 @@
 import {pool, uuid} from "../utils/db";
-import {MaterialRecordEntity} from "../types";
+import {MaterialRecordEntity, NewMaterialRecordEntity} from "../types";
 import {FieldPacket} from "mysql2";
 import {ValidationError} from "../utils/error";
 
@@ -11,10 +11,11 @@ export class MaterialRecord implements MaterialRecordEntity {
     shopName: string;
     previousPrice: string;
     currentPrice: string;
+    unit?: string;
     link: string;
     productGroup: string;
 
-    constructor(obj: MaterialRecordEntity) {
+    constructor(obj: NewMaterialRecordEntity) {
         if(!obj as any instanceof MaterialRecord) {
             throw new ValidationError("Provided data is not a valid record object.");
         }
@@ -34,14 +35,18 @@ export class MaterialRecord implements MaterialRecordEntity {
         if(!this.id) {
             this.id = uuid();
         }
+        if(this.unit === undefined || this.unit === "" || this.unit === null) {
+            this.unit = ".szt"
+        }
         await pool.execute(
-            'INSERT INTO `products` VALUES(:id, :name, :shopName, :previousPrice, :currentPrice, :link, :productGroup)',
+            'INSERT INTO `products` VALUES(:id, :name, :shopName, :previousPrice, :currentPrice, :unit, :link, :productGroup)',
             {
                 id: this.id,
                 name: this.name,
                 shopName: this.shopName,
                 previousPrice: this.previousPrice,
                 currentPrice: this.currentPrice,
+                unit: this.unit,
                 link: this.link,
                 productGroup: this.productGroup,
             }
@@ -63,9 +68,8 @@ export class MaterialRecord implements MaterialRecordEntity {
         return new MaterialRecord(results[0]);
     }
 
-    static async delete(id: string): Promise<string> {
+    static async delete(id: string): Promise<void> {
         await pool.execute('DELETE FROM `products` WHERE `id` = :id', {id,});
-        return id;
     }
 
 

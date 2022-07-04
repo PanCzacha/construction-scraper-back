@@ -12,7 +12,7 @@ materialRouter
 
     .post("/add", async (req, res, next) => {
         const {productGroup, link} = req.body;
-        const product = await GetData.getNewRecord(productGroup, link);
+        const product = await GetData.getNewRecord(link, productGroup);
         const newProduct = new MaterialRecord(product);
         await newProduct.insertNew();
         res.json(newProduct.id);
@@ -27,7 +27,7 @@ materialRouter
     .patch("/update/:id/", async (req, res, next) => {
         const id = req.params.id;
         const productToUpdate = await MaterialRecord.getOne(id);
-        const newPrice = await GetData.updateRecordData(productToUpdate.link, productToUpdate.shopName);
+        const newPrice = await GetData.updateRecordPrice(productToUpdate.link, productToUpdate.shopName);
         await productToUpdate.update(productToUpdate.id, newPrice);
         res.json(productToUpdate.id);
     })
