@@ -3,6 +3,7 @@ import {MaterialRecordEntity, NewMaterialRecordEntity} from "../types";
 import {FieldPacket} from "mysql2";
 import {ValidationError} from "../utils/error";
 
+
 type ProductRepoResults = [MaterialRecord[], FieldPacket[]];
 
 export class MaterialRecord implements MaterialRecordEntity {

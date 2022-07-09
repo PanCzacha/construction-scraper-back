@@ -10,3 +10,5 @@ export interface MaterialRecordEntity {
 }
 
 export type NewMaterialRecordEntity = Omit<MaterialRecordEntity, "id">;
+
+

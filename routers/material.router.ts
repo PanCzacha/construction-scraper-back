@@ -1,6 +1,10 @@
 import express from "express";
-import {GetData} from "../utils/getData";
+import {GetData} from "../utils/get-data";
 import {MaterialRecord} from "../records/material.record";
+import {NewShopListRecord, Shops} from "../types";
+import fetch from "node-fetch";
+import {getShopsGeoData} from "../utils/get-shops-geo-data";
+import {ShoplistRecord} from "../records/shoplist.record";
 
 export const materialRouter = express.Router();
 
