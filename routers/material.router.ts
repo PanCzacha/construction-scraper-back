@@ -41,7 +41,11 @@ materialRouter
             const id = req.params.id;
             const productToUpdate = await MaterialRecord.getOne(id);
             const newPrice = await GetData.updateRecordPrice(productToUpdate.link, productToUpdate.shopName);
-            await productToUpdate.update(productToUpdate.id, newPrice);
+            if(newPrice === 404) {
+                res.sendStatus(404);
+                return
+            }
+            await productToUpdate.update(productToUpdate.id, newPrice as string);
             res.json(productToUpdate.id);
         } catch (err) {
             next(err)

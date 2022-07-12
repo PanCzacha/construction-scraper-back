@@ -97,7 +97,10 @@ export class GetData {
             const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
-            await page.goto(link);
+            const response = await page.goto(link);
+            if(response.status() === 404 || response.status() === 500) {
+                return response.status();
+            }
             const product = await page.evaluate(this.chooseQuery(shopName));
             await browser.close();
             return product.currentPrice;
