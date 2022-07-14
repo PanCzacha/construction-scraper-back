@@ -5,15 +5,14 @@ import cors from "cors";
 import "./utils/db";
 import {materialRouter} from "./routers/material.router"
 import {shopDataRouter} from "./routers/shop-data.router";
+import {config} from "./config/config";
 
 const app = express();
 const port: number = 3001;
 
 app.use(json());
 app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: config.corsOrigin,
 }))
 
 app.use("/", materialRouter);
