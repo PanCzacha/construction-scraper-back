@@ -73,6 +73,5 @@ export class MaterialRecord implements MaterialRecordEntity {
         await pool.execute('DELETE FROM `products` WHERE `id` = :id', {id,});
     }
 
-
 }
 
