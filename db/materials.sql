@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 11 Lip 2022, 15:44
+-- Czas generowania: 15 Lip 2022, 22:57
 -- Wersja serwera: 10.4.17-MariaDB
 -- Wersja PHP: 8.0.1
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `materials`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `list`
+--
+
+CREATE TABLE `list` (
+  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+  `shopAddress` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shopName` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `materialQuantity` decimal(6,2) NOT NULL,
+  `materialCost` decimal(6,2) NOT NULL,
+  `unit` varchar(5) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
