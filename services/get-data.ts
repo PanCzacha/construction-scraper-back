@@ -6,18 +6,12 @@ export class GetData {
     static obiQuery(): GetMaterialRecordDataRequest {
         let data = {} as GetMaterialRecordDataRequest;
         const productArea = document.querySelectorAll("section.overview__description");
+
         for (const product of productArea) {
             data = {
                 name: product.querySelector("h1.h2.overview__heading").textContent,
-                currentPrice: product.querySelector("span.overview__price > strong > strong").textContent.replace(/,/, "."),
-                unit: (() => {
-                    const item = product.querySelector("div.optional-hidden:nth-child(2)").textContent.slice(-4)
-                    if (item === "/ m2") {
-                        return "m2"
-                    } else {
-                        return item
-                    }
-                })(),
+                currentPrice: product.querySelector(".overview__price > strong:nth-child(1) > strong:nth-child(1)").textContent.replace(/,/,".") ,
+                unit: "szt.",
                 link: window.location.href,
             }
 

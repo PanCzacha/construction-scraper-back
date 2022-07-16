@@ -1,8 +1,5 @@
 import express from "express";
 import {ListRecord} from "../records/list.record";
-import {GetData} from "../services/get-data";
-import {MaterialRecord} from "../records/material.record";
-
 export const listRouter = express.Router();
 
 listRouter
