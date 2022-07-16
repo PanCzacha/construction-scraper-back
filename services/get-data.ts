@@ -10,7 +10,7 @@ export class GetData {
         for (const product of productArea) {
             data = {
                 name: product.querySelector("h1.h2.overview__heading").textContent,
-                currentPrice: product.querySelector(".overview__price > strong:nth-child(1) > strong:nth-child(1)").textContent.replace(/,/,".") ,
+                currentPrice: product.querySelector(".overview__price > strong:nth-child(1) > strong:nth-child(1)").textContent.replace(/,/,"."),
                 unit: "szt.",
                 link: window.location.href,
             }

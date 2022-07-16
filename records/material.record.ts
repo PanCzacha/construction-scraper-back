@@ -25,9 +25,6 @@ export class MaterialRecord implements MaterialRecordEntity {
                 "You must provide a valid category name of added product. No more, then 20 and not less then 2 signs in length."
             );
         }
-        if(obj.previousPrice === undefined) {
-            obj.previousPrice = null;
-        }
 
         Object.assign(this, obj);
     }
@@ -38,6 +35,9 @@ export class MaterialRecord implements MaterialRecordEntity {
         }
         if(this.unit === undefined || this.unit === "" || this.unit === null) {
             this.unit = ".szt"
+        }
+        if(this.previousPrice === undefined) {
+            this.previousPrice = null;
         }
         await pool.execute(
             'INSERT INTO `products` VALUES(:id, :name, :shopName, :previousPrice, :currentPrice, :unit, :link, :productGroup)',
