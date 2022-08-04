@@ -6,9 +6,9 @@ import {wait} from "../../utils/wait";
 
 const initShops = async (): Promise<void> => {
     let shopsAddressData: Shops[] = [];
-    const shopsToGet = ["https://www.promoceny.pl/sklepy/szukaj/castorama/", "https://www.promoceny.pl/sklepy/szukaj/obi/", "https://www.promoceny.pl/sklepy/szukaj/leroy-merlin/"];
+    const shopsToGetGeoLocationFrom = ["https://www.promoceny.pl/sklepy/szukaj/castorama/", "https://www.promoceny.pl/sklepy/szukaj/obi/", "https://www.promoceny.pl/sklepy/szukaj/leroy-merlin/"];
     await Promise.allSettled(
-        shopsToGet.map(async (shop) => {
+        shopsToGetGeoLocationFrom.map(async (shop) => {
             const res = await GetShops.getShopList(shop);
             shopsAddressData.push(...res);
         })
@@ -20,17 +20,17 @@ const initShops = async (): Promise<void> => {
     const shopsAddressDataPart2 = shopsAddressData.slice(99, 199);
     const shopsAddressDataPart3 = shopsAddressData.slice(199);
 
-    console.log("Executing first part.");
+    console.log("Getting geolocation of 1 / 3 address arrays.");
     await getShopsGeoData(shopsAddressDataPart1, shopsGeoLocationData);
-    console.log("Waiting time no.1")
+    console.log("Waiting time after first part")
     await wait(1000 * 70);
 
-    console.log("Executing second part.");
+    console.log("Getting geolocation of 2 / 3 address arrays.");
     await getShopsGeoData(shopsAddressDataPart2, shopsGeoLocationData);
-    console.log("Waiting time no.2")
+    console.log("Waiting time after second part")
     await wait(1000 * 70);
 
-    console.log("Executing third part.");
+    console.log("Getting geolocation of 3 / 3 address arrays.");
     await getShopsGeoData(shopsAddressDataPart3, shopsGeoLocationData);
 
     console.log("Inserting into database...");

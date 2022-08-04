@@ -12,7 +12,7 @@ export class MaterialRecord implements MaterialRecordEntity {
     shopName: string;
     previousPrice: string;
     currentPrice: string;
-    unit?: string;
+    unit: string;
     link: string;
     productGroup: string;
 
