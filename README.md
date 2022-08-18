@@ -5,9 +5,9 @@ To run the app you have to provide valid Open Route Service (https://openroutese
 It's free of charge and you can login using GitHub credentials.
 
 Included is a sql script to init a db. 
-"shops" table is populated with stores data needed to run the app.
+"Shops" table is populated with stores data needed to run the app.
 
-Also, if you need to, you can initialize "shops" table from scratch if you need to, by using init-shops.ts file located in services/shops-db-init.
+Also, if you need to, you can initialize "shops" table from scratch, by using init-shops.ts file located in services/shops-db-init.
 
 This is my private project that I want to use during construction of my house.
 
