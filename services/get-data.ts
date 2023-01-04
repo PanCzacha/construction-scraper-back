@@ -1,18 +1,20 @@
 import puppeteer from 'puppeteer';
 import {GetMaterialRecordDataRequest, PatchMaterialRecordUpdateRequest, NewMaterialRecordEntity} from "../types";
+import {ValidationError} from "../utils/error";
 
 export class GetData {
 
     static obiQuery(): GetMaterialRecordDataRequest {
         let data = {} as GetMaterialRecordDataRequest;
+        const date = new Date().toLocaleDateString("pl-PL");
         const productArea = document.querySelectorAll("section.overview__description");
-
         for (const product of productArea) {
             data = {
                 name: product.querySelector("h1.h2.overview__heading").textContent,
-                currentPrice: product.querySelector(".overview__price > strong:nth-child(1) > strong:nth-child(1)").textContent.replace(/,/,"."),
+                currentPrice: Number(product.querySelector(".overview__price > strong:nth-child(1) > strong:nth-child(1)").textContent.replace(/,/,".")),
                 unit: "szt.",
                 link: window.location.href,
+                updateDate: date,
             }
 
         }
@@ -21,13 +23,15 @@ export class GetData {
 
     static castoramaQuery(): GetMaterialRecordDataRequest {
         let data = {} as GetMaterialRecordDataRequest;
+        const date = new Date().toLocaleDateString("pl-PL");
         const productArea = document.querySelectorAll("section.product-card");
         for (const product of productArea) {
             data = {
                 name: product.querySelector("h1.heading-base").textContent.trim(),
-                currentPrice: product.querySelector(".price-value.price-value--product-page-price-box").textContent.trim().replace(/,/, "."),
+                currentPrice: Number(product.querySelector(".price-value.price-value--product-page-price-box").textContent.trim().replace(/,/, ".")),
                 unit: (product.querySelector(".price-unit--product-page-price-box") as HTMLElement).outerText.slice(-3) === "m 2" ? "m2" : "szt.",
                 link: window.location.href,
+                updateDate: date,
             }
         }
         return data;
@@ -35,11 +39,12 @@ export class GetData {
 
     static leroyMerlinQuery(): GetMaterialRecordDataRequest {
         let data = {} as GetMaterialRecordDataRequest;
+        const date = new Date().toLocaleDateString("pl-PL");
         const productArea = document.querySelectorAll("section.main-content");
         for (const product of productArea) {
             data = {
                 name: product.querySelector("div.product-title > h1").textContent,
-                currentPrice: (product.querySelector("span.size-big:nth-child(2)") as HTMLElement).dataset.price,
+                currentPrice: Number((product.querySelector("span.size-big:nth-child(2)") as HTMLElement).dataset.price),
                 unit: (() => {
                     const item = (product.querySelector("span.size-big:nth-child(2)>span:nth-child(3)>span:nth-child(3)>span:nth-child(1)") as HTMLElement).textContent.slice(-4)
                     if (item === " /m2") {
@@ -50,6 +55,7 @@ export class GetData {
                 })()
                 ,
                 link: window.location.href,
+                updateDate: date,
             }
         }
         return data;
@@ -83,7 +89,7 @@ export class GetData {
                 productGroup,
             };
         } catch (err) {
-            console.error(err);
+            return err
         }
     }
 
@@ -98,7 +104,7 @@ export class GetData {
             await browser.close();
             return product.currentPrice;
         } catch (err) {
-            console.error(err);
+            return err
         }
     }
 

@@ -2,13 +2,15 @@ export interface MaterialRecordEntity {
     id: string;
     name: string;
     shopName: string;
-    previousPrice: string | null;
-    currentPrice: string;
+    previousPriceDate: string | null;
+    previousPrice: number | null;
+    currentPrice: number;
+    updateDate: string;
     unit: string;
     link: string;
     productGroup: string;
 }
 
-export type NewMaterialRecordEntity = Omit<MaterialRecordEntity, "id" | "previousPrice">;
+export type NewMaterialRecordEntity = Omit<MaterialRecordEntity, "id" | "previousPriceDate" | "previousPrice">;
 
 

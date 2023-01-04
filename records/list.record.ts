@@ -7,6 +7,7 @@ type ListRepoResults = [ListRecord[], FieldPacket[]];
 
 export class ListRecord implements ListRecordEntity {
     id: string;
+    shopId: string;
     shopName: string;
     shopAddress: string;
     productName: string;
@@ -27,9 +28,10 @@ export class ListRecord implements ListRecordEntity {
             this.id = uuid();
         }
         await pool.execute(
-            'INSERT INTO `list` VALUES(:id, :shopAddress, :shopName, :productName, :materialQuantity, :materialCost, :unit)',
+            'INSERT INTO `list` VALUES(:id, :shopId, :shopAddress, :shopName, :productName, :materialQuantity, :materialCost, :unit)',
             {
                 id: this.id,
+                shopId: this.shopId,
                 shopAddress: this.shopAddress,
                 shopName: this.shopName,
                 productName: this.productName,

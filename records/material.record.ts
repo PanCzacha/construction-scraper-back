@@ -10,43 +10,65 @@ export class MaterialRecord implements MaterialRecordEntity {
     id: string;
     name: string;
     shopName: string;
-    previousPrice: string;
-    currentPrice: string;
+    previousPriceDate: string | null;
+    previousPrice: number;
+    currentPrice: number;
+    updateDate: string;
     unit: string;
     link: string;
     productGroup: string;
 
     constructor(obj: NewMaterialRecordEntity) {
-        if(!obj as any instanceof MaterialRecord) {
-            throw new ValidationError("Provided data is not a valid record object.");
+        const checkURL = (string: string) => {
+            try {
+                new URL(string);
+                return true
+            } catch (err) {
+                return false
+            }
         }
-        if(!obj.productGroup || obj.productGroup === "" || obj.productGroup.length <= 2 || obj.productGroup.length >= 50) {
+        if (!checkURL(obj.link)) {
+            throw new ValidationError("Provided string is not valid URL")
+        }
+        if (!obj.productGroup || obj.productGroup === "" || obj.productGroup.length <= 2 || obj.productGroup.length >= 50) {
             throw new ValidationError(
-                "You must provide a valid category name of added product. No more, then 20 and not less then 2 signs in length."
+                "Provided category name not valid. Must have at least 2 signs and no more than 50."
             );
+        }
+        if (!obj as any instanceof MaterialRecord) {
+            throw new ValidationError("Provided data is not a valid record object.");
         }
 
         Object.assign(this, obj);
     }
 
     async insertNew(): Promise<void> {
-        if(!this.id) {
+        if (!this.id) {
             this.id = uuid();
         }
-        if(this.unit === undefined || this.unit === "" || this.unit === null) {
+        if (this.unit === undefined || this.unit === "" || this.unit === null) {
             this.unit = ".szt"
         }
-        if(this.previousPrice === undefined) {
+        if (this.previousPrice === undefined) {
             this.previousPrice = null;
         }
-        await pool.execute(
-            'INSERT INTO `products` VALUES(:id, :name, :shopName, :previousPrice, :currentPrice, :unit, :link, :productGroup)',
+        if (this.previousPriceDate === undefined) {
+            this.previousPriceDate = null;
+        }
+        if (this.updateDate === undefined) {
+            this.updateDate = new Date().toLocaleDateString("pl-PL")
+        }
+        await pool.execute('INSERT INTO `products` VALUES(:id, :name, :shopName, :previousPriceDate, :previousPrice, :currentPrice,' +
+            ' :updateDate, :unit,' +
+            ' :link, :productGroup)',
             {
                 id: this.id,
                 name: this.name,
                 shopName: this.shopName,
+                previousPriceDate: this.previousPriceDate,
                 previousPrice: this.previousPrice,
                 currentPrice: this.currentPrice,
+                updateDate: this.updateDate,
                 unit: this.unit,
                 link: this.link,
                 productGroup: this.productGroup,
@@ -55,8 +77,14 @@ export class MaterialRecord implements MaterialRecordEntity {
     }
 
     async update(id: string, currPrice: string): Promise<void> {
+        const newUpdateDate = new Date().toLocaleDateString("pl-PL");
+        if (id as any instanceof Error || currPrice as any instanceof Error) {
+            throw new ValidationError("URL not valid or shop service unavailable")
+        }
         await pool.execute('UPDATE `products` SET `previousPrice` = `currentPrice` WHERE `id`= :id', {id});
         await pool.execute('UPDATE `products` SET `currentPrice` = :currPrice WHERE `id` = :id', {id, currPrice});
+        await pool.execute('UPDATE `products` SET `previousPriceDate` = `updateDate` WHERE `id` = :id', {id});
+        await pool.execute('UPDATE `products` SET `updateDate` = :newUpdateDate WHERE `id` = :id', {id, newUpdateDate});
     }
 
     static async getAll(): Promise<MaterialRecord[]> {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 04 Sie 2022, 23:34
+-- Czas generowania: 04 Sty 2023, 22:07
 -- Wersja serwera: 10.4.17-MariaDB
 -- Wersja PHP: 8.0.1
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `list` (
   `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
+  `shopId` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shopAddress` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shopName` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `productName` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -47,8 +48,10 @@ CREATE TABLE `products` (
   `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT uuid(),
   `name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `shopName` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `previousPriceDate` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `previousPrice` decimal(6,2) DEFAULT NULL,
   `currentPrice` decimal(6,2) NOT NULL,
+  `updateDate` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
   `link` varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL,
   `productGroup` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL

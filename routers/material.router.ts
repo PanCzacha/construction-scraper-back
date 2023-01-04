@@ -42,9 +42,6 @@ materialRouter
             const id = req.params.id;
             const productToUpdate = await MaterialRecord.getOne(id);
             const newPrice = await GetData.updateRecordPrice(productToUpdate.link, productToUpdate.shopName);
-            if(newPrice === undefined) {
-                throw new ValidationError(`URL not valid or shop service unavailable`);
-            }
             await productToUpdate.update(productToUpdate.id, newPrice as string);
             res.json(productToUpdate.id);
         } catch (err) {

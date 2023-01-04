@@ -6,12 +6,12 @@ import {getDistances} from "../services/get-distances";
 export const shopDataRouter = express.Router();
 
 shopDataRouter
-    .get("/distances/:shopName/:coordinates", async (req, res, next) => {
+    .get("/distances/:nameOfShopsChain/:startCoordinates", async (req, res, next) => {
         try {
-            const {shopName, coordinates} = req.params;
-            const lon = coordinates.split(",")[0].trim();
-            const lat = coordinates.split(",")[1].trim();
-            const dbData = await ShopDataRecord.getNamedShop(shopName);
+            const {nameOfShopsChain, startCoordinates} = req.params;
+            const lon = startCoordinates.split(",")[0].trim();
+            const lat = startCoordinates.split(",")[1].trim();
+            const dbData = await ShopDataRecord.getNamedShop(nameOfShopsChain);
 
             const coordinatesForReq = dbData.map((shop) => {
                 return [
@@ -28,11 +28,11 @@ shopDataRouter
 
             const response = await getDistances(coordinatesForReq, destinationsForReq);
             const apiData = await response.json();
-
             const [distances] = apiData.distances;
 
             const shopsWithDistances: DistanceMatrixReq[] = dbData.map((shop, i) => {
                 return {
+                    id: shop.id,
                     address: shop.address,
                     distance: distances[i],
                 }

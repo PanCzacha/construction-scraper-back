@@ -1,5 +1,6 @@
 export interface ListRecordEntity {
     id: string;
+    shopId: string;
     shopAddress: string;
     shopName: string;
     productName: string;
