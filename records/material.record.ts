@@ -19,17 +19,6 @@ export class MaterialRecord implements MaterialRecordEntity {
     productGroup: string;
 
     constructor(obj: NewMaterialRecordEntity) {
-        const checkURL = (string: string) => {
-            try {
-                new URL(string);
-                return true
-            } catch (err) {
-                return false
-            }
-        }
-        if (!checkURL(obj.link)) {
-            throw new ValidationError("Provided string is not valid URL")
-        }
         if (!obj.productGroup || obj.productGroup === "" || obj.productGroup.length <= 2 || obj.productGroup.length >= 50) {
             throw new ValidationError(
                 "Provided category name not valid. Must have at least 2 signs and no more than 50."
@@ -78,9 +67,6 @@ export class MaterialRecord implements MaterialRecordEntity {
 
     async update(id: string, currPrice: string): Promise<void> {
         const newUpdateDate = new Date().toLocaleDateString("pl-PL");
-        if (id as any instanceof Error || currPrice as any instanceof Error) {
-            throw new ValidationError("URL not valid or shop service unavailable")
-        }
         await pool.execute('UPDATE `products` SET `previousPrice` = `currentPrice` WHERE `id`= :id', {id});
         await pool.execute('UPDATE `products` SET `currentPrice` = :currPrice WHERE `id` = :id', {id, currPrice});
         await pool.execute('UPDATE `products` SET `previousPriceDate` = `updateDate` WHERE `id` = :id', {id});

@@ -1,3 +1,5 @@
+import {ValidationError} from "../../utils/error";
+
 export interface MaterialRecordEntity {
     id: string;
     name: string;
