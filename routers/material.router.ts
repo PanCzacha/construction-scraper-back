@@ -2,6 +2,7 @@ import express from "express";
 import { GetData } from "../services/get-data";
 import { MaterialRecord } from "../records/material.record";
 import { ValidationError } from "../utils/error";
+import { log } from "console";
 
 export const materialRouter = express.Router();
 
@@ -22,6 +23,7 @@ materialRouter
       const newProduct = new MaterialRecord(product);
       await newProduct.insertNew();
       res.json(newProduct.id);
+      console.log("DUPA");
     } catch (err) {
       next(err);
     }
